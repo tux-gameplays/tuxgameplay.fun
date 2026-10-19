@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111318">
+  <title>Home - Tux Gameplay.fun</title>
+  <link rel="icon" href="res/tuxlogo.webp" type="image/webp">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      scrollbar-width: none;
+    }
+
+    :root::-webkit-scrollbar {
+      display: none;
+    }
+
+    body {
+      min-height: 100vh;
+      position: relative;
+      isolation: isolate;
+      overflow-x: hidden;
+      background: #090811;
+      color: #f7f5ff;
+      font-family: Outfit, sans-serif;
+    }
+
+    .wave-background {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+      background: #090811;
+    }
+
+    .wave-background svg {
+      position: absolute;
+      width: 150%;
+      min-width: 1100px;
+      height: 92vh;
+      min-height: 520px;
+      left: -20%;
+      bottom: -9%;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .12) 22%, #000 48%);
+      mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .12) 22%, #000 48%);
+    }
+
+    .wave-glow {
+      fill: url(#wave-glow);
+    }
+
+    .wave-line {
+      fill: none;
+      stroke: #7862e8;
+      stroke-width: 1.4;
+      opacity: .28;
+    }
+
+    .wave-line-soft {
+      fill: none;
+      stroke: #a18eff;
+      stroke-width: 1;
+      opacity: .16;
+    }
+
+    .wave-drift {
+      transform-origin: center;
+      animation: waveDrift 16s ease-in-out infinite alternate;
+    }
+
+    .wave-drift-slow {
+      transform-origin: center;
+      animation: waveDrift 23s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes waveDrift {
+      from {
+        transform: translate3d(-1.5%, 1%, 0) scale(1);
+      }
+
+      to {
+        transform: translate3d(1.5%, -1%, 0) scale(1.025);
+      }
+    }
+
+    .site-header {
+      position: relative;
+      z-index: 1;
+      background: rgba(9, 8, 17, .62);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .site-header .navbar {
+      width: 100%;
+      min-height: 4.5rem;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-links {
+      display: none;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .header-links a {
+      color: #e2ddf2;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color .15s ease;
+    }
+
+    .header-links a:hover,
+    .header-links a:focus-visible {
+      color: #b9a7ff;
+    }
+
+    .hamburger-button {
+      display: inline-flex;
+      width: 2.75rem;
+      height: 2.75rem;
+      align-items: center;
+      justify-content: center;
+      margin-inline-end: .5rem;
+      padding: .5rem;
+      color: #f7f5ff;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: .65rem;
+    }
+
+    .hamburger-button svg {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: rgba(0, 0, 0, .58);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s ease, visibility .25s ease;
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      inset: 0 0 0 auto;
+      z-index: 21;
+      width: min(19rem, 86vw);
+      padding: 1.25rem;
+      color: #f7f5ff;
+      background: #12101d;
+      border-left: 1px solid rgba(255, 255, 255, .12);
+      box-shadow: -1rem 0 3rem rgba(0, 0, 0, .3);
+      transform: translateX(105%);
+      visibility: hidden;
+      transition: transform .3s cubic-bezier(.2, .7, .25, 1), visibility .3s;
+    }
+
+    .mobile-drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .mobile-drawer-brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-inline-start: .5rem;
+    }
+
+    .mobile-drawer-logo {
+      width: 2rem;
+      height: 2rem;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .mobile-drawer-title {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .mobile-drawer-close {
+      color: #e2ddf2;
+      background: transparent;
+      border: 0;
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    .mobile-drawer-links {
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+      margin-top: 1rem;
+    }
+
+    .mobile-drawer-links a {
+      padding: .85rem .75rem;
+      color: #f7f5ff;
+      font-size: 1.05rem;
+      text-decoration: none;
+      border-radius: .55rem;
+    }
+
+    .mobile-drawer-links a:hover,
+    .mobile-drawer-links a:focus-visible {
+      color: #d6ceff;
+      background: rgba(135, 111, 240, .16);
+    }
+
+    body.drawer-open .drawer-backdrop {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    body.drawer-open .mobile-drawer {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    @media (min-width: 768px) {
+      .header-links {
+        display: flex;
+      }
+
+      .hamburger-button {
+        display: none;
+      }
+    }
+
+    .site-header .navbar-brand {
+      min-width: 0;
+      margin: 0;
+      margin-inline-start: .5rem;
+      padding-block: .375rem;
+      gap: .625rem !important;
+    }
+
+    .brand-mark {
+      width: 2.25rem;
+      height: 2.25rem;
+      flex: 0 0 2.25rem;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .brand-name {
+      color: #f7f5ff;
+      font-size: clamp(.9rem, 4vw, 1rem);
+      font-weight: 600;
+      letter-spacing: .01em;
+      white-space: nowrap;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: calc(100vh - 4.5rem);
+    }
+
+    .hero h1 {
+      max-width: 850px;
+      font-size: clamp(2.5rem, 7vw, 4.75rem);
+      font-weight: 700;
+      letter-spacing: -.04em;
+      line-height: 1.08;
+    }
+
+    .hero p {
+      color: #d0cddd;
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+    }
+
+    .fade-in-right {
+      opacity: 0;
+      transform: translateX(28px);
+      animation: fadeInRight .85s cubic-bezier(.2, .7, .25, 1) forwards;
+    }
+
+    .hero .buttons.fade-in-right {
+      animation-delay: .52s;
+    }
+
+    @keyframes fadeInRight {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .hero-title-brand {
+      white-space: nowrap;
+    }
+
+    .letter-reveal>span {
+      display: inline-block;
+      white-space: pre;
+      opacity: 0;
+      transform: translateX(.3em);
+      animation: letterReveal .42s cubic-bezier(.2, .7, .25, 1) forwards;
+      animation-delay: var(--letter-delay);
+    }
+
+    @keyframes letterReveal {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .btn {
+      --bs-btn-font-size: 1.125rem;
+      --bs-btn-font-weight: 600;
+      --bs-btn-padding-x: 2rem;
+      --bs-btn-padding-y: 1rem;
+      --bs-btn-border-radius: .65rem;
+    }
+
+    .btn-solid {
+      --bs-theme-bg: #6558d3;
+      --bs-theme-contrast: #fff;
+    }
+
+    .btn-git {
+      --bs-theme-bg: #e87524;
+      --bs-theme-contrast: #fff;
+    }
+
+    .btn-outline {
+      --bs-btn-color: #343843;
+      --bs-btn-border-color: #c8cbd2;
+      --bs-btn-hover-bg: #f1f2f5;
+      --bs-btn-hover-color: #20232a;
+      --bs-btn-hover-border-color: #9ca1ac;
+    }
+
+    .btn-fluxer {
+      min-width: 11rem;
+    }
+
+    .fluxer-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      flex: 0 0 auto;
+    }
+
+    .menu {
+      --bs-menu-min-width: 12rem;
+      --bs-menu-bg: #fff;
+      --bs-menu-color: #20232a;
+      --bs-menu-border-color: #e6e8ec;
+      --bs-menu-item-color: #29234c;
+      --bs-menu-item-hover-color: #29234c;
+      --bs-menu-item-hover-bg: #f0edff;
+      --bs-menu-item-active-color: #29234c;
+      --bs-menu-item-active-bg: #e8e2ff;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      text-decoration: none;
+    }
+
+    .menu .menu-item {
+      color: #29234c;
+    }
+
+    .menu .menu-item:hover,
+    .menu .menu-item:focus-visible {
+      color: #29234c;
+      background-color: #f0edff;
+    }
+
+    .menu .menu-item:active,
+    .menu .menu-item.active {
+      color: #29234c;
+      background-color: #e8e2ff;
+    }
+
+    .menu-item-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex: 0 0 auto;
+    }
+
+    .menu-chevron {
+      margin-left: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+
+      .fade-in-right {
+        opacity: 1;
+        transform: none;
+      }
+
+      .letter-reveal>span {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+
+      .drawer-backdrop,
+      .mobile-drawer {
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wave-background" aria-hidden="true">
+    <svg viewBox="0 0 1600 850" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="wave-glow" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#342270" stop-opacity=".06" />
+          <stop offset=".55" stop-color="#714be0" stop-opacity=".3" />
+          <stop offset="1" stop-color="#251b55" stop-opacity=".08" />
+        </linearGradient>
+      </defs>
+      <path class="wave-glow" d="M0 410C190 330 290 520 480 460S760 300 960 410s310 165 470 80 130-80 170-60v420H0Z" />
+      <g class="wave-drift">
+        <path class="wave-line" d="M-80 470C140 360 300 560 500 490s280-190 490-85 315 180 480 90 170-100 250-60" />
+        <path class="wave-line-soft"
+          d="M-80 500C140 390 300 590 500 520s280-190 490-85 315 180 480 90 170-100 250-60" />
+        <path class="wave-line" d="M-80 530C140 420 300 620 500 550s280-190 490-85 315 180 480 90 170-100 250-60" />
+      </g>
+      <g class="wave-drift-slow">
+        <path class="wave-line-soft" d="M-80 590C130 490 310 680 510 620s275-180 480-80 320 150 490 70 170-90 240-50" />
+        <path class="wave-line" d="M-80 620C130 520 310 710 510 650s275-180 480-80 320 150 490 70 170-90 240-50" />
+        <path class="wave-line-soft" d="M-80 650C130 550 310 740 510 680s275-180 480-80 320 150 490 70 170-90 240-50" />
+      </g>
+    </svg>
+  </div>
+  <header class="site-header">
+    <nav class="container navbar py-3" aria-label="Navegação principal">
+      <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="/">
+        <img class="brand-mark" src="res/tuxlogo.webp" alt="" onerror="this.hidden=true">
+        <span class="brand-name">tuxgameplay.fun</span>
+      </a>
+      <div class="header-links" aria-label="Links principais">
+        <a href="https://games.tuxgameplay.fun">Games</a>
+        <a href="https://tracker.tuxgameplay.fun">Tracker</a>
+        <a href="https://uptime.tuxgameplay.fun">Uptime</a>
+      </div>
+      <button id="mobile-menu-open" class="hamburger-button" type="button" aria-label="Abrir menu" aria-expanded="false"
+        aria-controls="mobile-drawer">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+    </nav>
+  </header>
+  <button id="drawer-backdrop" class="drawer-backdrop" type="button" aria-label="Fechar menu" tabindex="-1"></button>
+  <aside id="mobile-drawer" class="mobile-drawer" aria-label="Menu principal" aria-hidden="true" inert>
+    <div class="mobile-drawer-header">
+      <div class="mobile-drawer-brand">
+        <img class="mobile-drawer-logo" src="res/tuxlogo.webp" alt="Logo do Tux" onerror="this.hidden=true">
+        <p class="mobile-drawer-title">tuxgameplay.fun</p>
+      </div>
+      <button id="mobile-menu-close" class="mobile-drawer-close" type="button" aria-label="Fechar menu">&times;</button>
+    </div>
+    <nav class="mobile-drawer-links" aria-label="Links principais">
+      <a href="https://games.tuxgameplay.fun">Games</a>
+      <a href="https://tracker.tuxgameplay.fun">Tracker</a>
+      <a href="https://uptime.tuxgameplay.fun">Uptime</a>
+    </nav>
+  </aside>
+  <main class="hero container d-flex flex-column justify-content-center align-items-center text-center py-5">
+    <h1 class="letter-reveal mb-3">Boas-vindas ao <span class="hero-title-brand">Tux Gameplay</span></h1>
+    <p class="letter-reveal mb-0">A comunidade de jogos &amp; Linux perfeita para você.</p>
+    <div class="buttons fade-in-right d-flex flex-wrap justify-content-center gap-3 mt-4">
+      <div class="position-relative">
+        <button id="github-menu-toggle"
+          class="btn btn-solid btn-git btn-styled d-inline-flex align-items-center justify-content-center gap-2"
+          type="button" aria-expanded="false" aria-haspopup="true" aria-controls="repository-menu">
+          <svg class="menu-item-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor"
+              d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15 1 1.7 2.62 1.21 3.26.93.1-.72.39-1.21.71-1.49-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.11-1.44 3.05-1.14 3.05-1.14.61 1.54.23 2.68.11 2.96.72.78 1.15 1.77 1.15 2.99 0 4.29-2.61 5.23-5.1 5.51.4.35.76 1.03.76 2.08V22c0 .29.2.63.76.52A11.1 11.1 0 0 0 12 .9Z" />
+          </svg>
+          <span>GitHub</span><span class="menu-chevron" aria-hidden="true">▾</span>
+        </button>
+        <ul id="repository-menu" class="menu" role="menu" aria-labelledby="github-menu-toggle">
+          <li><a class="menu-item" role="menuitem" href="https://kups.tuxgameplay.fun" target="_blank"
+              rel="noopener noreferrer">
+              <svg class="menu-item-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#20232a"
+                  d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.67-3.76-1.32-3.76-1.32-.5-1.28-1.24-1.62-1.24-1.62-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15 1 1.7 2.62 1.21 3.26.93.1-.72.39-1.21.71-1.49-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.05 1.14a10.6 10.6 0 0 1 5.55 0c2.11-1.44 3.05-1.14 3.05-1.14.61 1.54.23 2.68.11 2.96.72.78 1.15 1.77 1.15 2.99 0 4.29-2.61 5.23-5.1 5.51.4.35.76 1.03.76 2.08V22c0 .29.2.63.76.52A11.1 11.1 0 0 0 12 .9Z" />
+              </svg><span class="menu-item-content"><span>GitHub</span></span></a></li>
+          <li><a class="menu-item" role="menuitem" href="https://gitlab.tuxgameplay.fun/" target="_blank"
+              rel="noopener noreferrer">
+              <svg class="menu-item-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#fc6d26"
+                  d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.4049L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4995-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z" />
+              </svg><span class="menu-item-content"><span>GitLab</span></span></a></li>
+        </ul>
+      </div>
+      <div class="position-relative">
+        <button id="community-menu-toggle"
+          class="btn btn-solid btn-styled btn-fluxer d-inline-flex align-items-center justify-content-center gap-2"
+          type="button" aria-expanded="false" aria-haspopup="true" aria-controls="community-menu">
+          <svg class="fluxer-icon" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+            <path fill="currentColor"
+              d="M256 0C397.385 0 512 114.615 512 256S397.385 512 256 512 0 397.385 0 256 114.615 0 256 0ZM187.53 128c-15.543 0-30.324 3.505-44.343 10.514-13.866 7.01-25.143 18.21-33.828 33.6-5.616 10.129-9.318 22.403-11.106 36.821-1.654 13.341 9.576 24.207 23.018 24.208 13.778 0 24.065-11.574 27.402-24.941 1.891-7.579 4.939-13.589 9.142-18.031 8.076-8.533 18.286-12.8 30.629-12.8 8.229 0 15.772 2.058 22.629 6.172 6.857 3.962 15.771 10.743 26.742 20.343 16.762 14.781 31.544 25.524 44.344 32.228 12.8 6.553 26.971 9.829 42.514 9.829s30.324-3.505 44.343-10.514c14.019-7.01 25.371-18.21 34.057-33.6 5.738-10.168 9.448-22.497 11.129-36.987 1.543-13.303-9.704-24.042-23.096-24.042-13.863 0-24.202 11.704-27.888 25.07-1.797 6.515-4.512 12.025-8.145 16.53-7.619 9.448-18.057 14.171-31.314 14.171-8.229 0-15.696-1.981-22.4-5.942-6.553-4.115-15.543-10.972-26.972-20.572-16.914-14.171-31.772-24.686-44.572-31.543-12.647-7.009-26.742-10.514-42.285-10.514Zm0 138.057c-15.543 0-30.324 3.505-44.343 10.514-13.866 7.01-25.143 18.21-33.828 33.6-5.616 10.129-9.318 22.403-11.106 36.822-1.654 13.34 9.576 24.207 23.018 24.207 13.778 0 24.065-11.574 27.402-24.941 1.891-7.579 4.939-13.589 9.142-18.03 8.076-8.534 18.286-12.801 30.629-12.801 8.229 0 15.772 2.057 22.629 6.172 6.857 3.962 15.771 10.743 26.742 20.343 16.762 14.781 31.544 25.524 44.344 32.228 12.8 6.553 26.971 9.829 42.514 9.829s30.324-3.505 44.343-10.514c14.019-7.01 25.371-18.21 34.057-33.6 5.738-10.168 9.448-22.497 11.129-36.987 1.543-13.302-9.704-24.042-23.096-24.042-13.863.001-24.202 11.705-27.888 25.071-1.797 6.515-4.512 12.025-8.145 16.53-7.619 9.448-18.057 14.172-31.314 14.172-8.229 0-15.696-1.982-22.4-5.943-6.553-4.114-15.543-10.971-26.972-20.571-16.914-14.172-31.772-24.686-44.572-31.543-12.647-7.01-26.742-10.514-42.285-10.514Z" />
+          </svg>
+          <span>Fluxer</span><span class="menu-chevron" aria-hidden="true">▾</span>
+        </button>
+        <ul id="community-menu" class="menu" role="menu" aria-labelledby="community-menu-toggle">
+          <li><a class="menu-item" role="menuitem" href="https://fluxer.tuxgameplay.fun" target="_blank"
+              rel="noopener noreferrer"><svg class="menu-item-icon" viewBox="0 0 512 512" aria-hidden="true">
+                <path fill="#4641d9"
+                  d="M256 0C397.385 0 512 114.615 512 256S397.385 512 256 512 0 397.385 0 256 114.615 0 256 0Zm-68.47 128c-15.543 0-30.324 3.505-44.343 10.514-13.866 7.01-25.143 18.21-33.828 33.6-5.616 10.129-9.318 22.403-11.106 36.821-1.654 13.341 9.576 24.207 23.018 24.208 13.778 0 24.065-11.574 27.402-24.941 1.891-7.579 4.939-13.589 9.142-18.031 8.076-8.533 18.286-12.8 30.629-12.8 8.229 0 15.772 2.058 22.629 6.172 6.857 3.962 15.771 10.743 26.742 20.343 16.762 14.781 31.544 25.524 44.344 32.228 12.8 6.553 26.971 9.829 42.514 9.829s30.324-3.505 44.343-10.514c14.019-7.01 25.371-18.21 34.057-33.6 5.738-10.168 9.448-22.497 11.129-36.987 1.543-13.303-9.704-24.042-23.096-24.042-13.863 0-24.202 11.704-27.888 25.07-1.797 6.515-4.512 12.025-8.145 16.53-7.619 9.448-18.057 14.171-31.314 14.171-8.229 0-15.696-1.981-22.4-5.942-6.553-4.115-15.543-10.972-26.972-20.572-16.914-14.171-31.772-24.686-44.572-31.543-12.647-7.009-26.742-10.514-42.285-10.514Zm0 138.057c-15.543 0-30.324 3.505-44.343 10.514-13.866 7.01-25.143 18.21-33.828 33.6-5.616 10.129-9.318 22.403-11.106 36.822-1.654 13.34 9.576 24.207 23.018 24.207 13.778 0 24.065-11.574 27.402-24.941 1.891-7.579 4.939-13.589 9.142-18.03 8.076-8.534 18.286-12.801 30.629-12.801 8.229 0 15.772 2.057 22.629 6.172 6.857 3.962 15.771 10.743 26.742 20.343 16.762 14.781 31.544 25.524 44.344 32.228 12.8 6.553 26.971 9.829 42.514 9.829s30.324-3.505 44.343-10.514c14.019-7.01 25.371-18.21 34.057-33.6 5.738-10.168 9.448-22.497 11.129-36.987 1.543-13.302-9.704-24.042-23.096-24.042-13.863.001-24.202 11.705-27.888 25.071-1.797 6.515-4.512 12.025-8.145 16.53-7.619 9.448-18.057 14.172-31.314 14.172-8.229 0-15.696-1.982-22.4-5.943-6.553-4.114-15.543-10.971-26.972-20.571-16.914-14.172-31.772-24.686-44.572-31.543-12.647-7.01-26.742-10.514-42.285-10.514Z" />
+              </svg><span class="menu-item-content"><span>Fluxer</span></span></a></li>
+          <li><a class="menu-item" role="menuitem" href="https://discord.tuxgameplay.fun" target="_blank"
+              rel="noopener noreferrer"><svg class="menu-item-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#5865f2"
+                  d="M19.73 5.33a18.3 18.3 0 0 0-4.53-1.4.07.07 0 0 0-.08.04c-.2.35-.42.81-.58 1.17a16.9 16.9 0 0 0-5.08 0c-.16-.37-.39-.82-.59-1.17a.08.08 0 0 0-.08-.04 18.25 18.25 0 0 0-4.53 1.4.07.07 0 0 0-.03.03C1.35 9.6.56 13.74.96 17.83c0 .02.01.04.03.05a18.4 18.4 0 0 0 5.55 2.8.08.08 0 0 0 .09-.03c.43-.58.81-1.19 1.14-1.83a.08.08 0 0 0-.04-.1 12.1 12.1 0 0 1-1.73-.83.08.08 0 0 1-.01-.13c.12-.09.23-.18.34-.28a.08.08 0 0 1 .08-.01c3.63 1.66 7.56 1.66 11.14 0a.08.08 0 0 1 .08.01c.11.1.22.19.34.28a.08.08 0 0 1-.01.13c-.55.33-1.13.61-1.73.83a.08.08 0 0 0-.04.1c.34.64.72 1.25 1.14 1.83a.08.08 0 0 0 .09.03 18.34 18.34 0 0 0 5.56-2.8.08.08 0 0 0 .03-.05c.48-4.73-.8-8.83-3.35-12.47a.06.06 0 0 0-.03-.03ZM8.55 15.5c-1.08 0-1.97-.99-1.97-2.2 0-1.2.87-2.2 1.97-2.2 1.1 0 1.99 1 1.97 2.2 0 1.21-.87 2.2-1.97 2.2Zm6.9 0c-1.08 0-1.97-.99-1.97-2.2 0-1.2.87-2.2 1.97-2.2 1.1 0 1.99 1 1.97 2.2 0 1.21-.87 2.2-1.97 2.2Z" />
+              </svg><span class="menu-item-content"><span>Discord</span></span></a></li>
+        </ul>
+      </div>
+    </div>
+  </main>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function revealText(element, delay = 0) {
+      const text = element.textContent;
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+      const textNodes = [];
+      while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+      element.setAttribute('aria-label', text);
+      let index = 0;
+      for (const node of textNodes) {
+        const fragment = document.createDocumentFragment();
+        for (const character of Array.from(node.textContent)) {
+          const letter = document.createElement('span');
+          letter.setAttribute('aria-hidden', 'true');
+          letter.textContent = character;
+          letter.style.setProperty('--letter-delay', `${delay + index++ * 28}ms`);
+          fragment.appendChild(letter);
+        }
+        node.replaceWith(fragment);
+      }
+      return Array.from(text).length * 28;
+    }
+
+    const [heroTitle, heroDescription] = document.querySelectorAll('.letter-reveal');
+    const titleRevealDuration = revealText(heroTitle);
+    revealText(heroDescription, titleRevealDuration + 120);
+
+    const menuToggle = document.getElementById('community-menu-toggle');
+    const communityMenu = document.getElementById('community-menu');
+    const repositoryToggle = document.getElementById('github-menu-toggle');
+    const repositoryMenu = document.getElementById('repository-menu');
+    const closeCommunityMenu = () => {
+      communityMenu.classList.remove('show');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    };
+    const closeRepositoryMenu = () => {
+      repositoryMenu.classList.remove('show');
+      repositoryToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = communityMenu.classList.toggle('show');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) closeRepositoryMenu();
+    });
+    repositoryToggle.addEventListener('click', () => {
+      const isOpen = repositoryMenu.classList.toggle('show');
+      repositoryToggle.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) closeCommunityMenu();
+    });
+    document.addEventListener('click', (event) => {
+      if (!menuToggle.parentElement.contains(event.target)) closeCommunityMenu();
+      if (!repositoryToggle.parentElement.contains(event.target)) closeRepositoryMenu();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        const repositoryWasOpen = repositoryMenu.classList.contains('show');
+        closeCommunityMenu();
+        closeRepositoryMenu();
+        (repositoryWasOpen ? repositoryToggle : menuToggle).focus();
+      }
+    });
+
+    const drawer = document.getElementById('mobile-drawer');
+    const drawerToggle = document.getElementById('mobile-menu-open');
+    const setDrawerOpen = (isOpen) => {
+      document.body.classList.toggle('drawer-open', isOpen);
+      drawerToggle.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) {
+        drawer.removeAttribute('aria-hidden');
+        drawer.removeAttribute('inert');
+      } else {
+        drawer.setAttribute('aria-hidden', 'true');
+        drawer.setAttribute('inert', '');
+      }
+    };
+
+    const closeDrawer = () => {
+      setDrawerOpen(false);
+      drawerToggle.focus();
+    };
+
+    drawerToggle.addEventListener('click', () => {
+      setDrawerOpen(true);
+      document.getElementById('mobile-menu-close').focus();
+    });
+    document.getElementById('mobile-menu-close').addEventListener('click', closeDrawer);
+    document.getElementById('drawer-backdrop').addEventListener('click', closeDrawer);
+    drawer.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setDrawerOpen(false)));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && document.body.classList.contains('drawer-open')) closeDrawer();
+    });
+  </script>
+</body>
+
+</html>
