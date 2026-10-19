@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="res/tuxlogo.webp" type="image/webp">
+
+    <title>Home - Tux Gameplay.fun</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #030308;
+            color: #ffffff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Fundo Imersivo (Orbes) */
+        .bg-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: #030308;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.5;
+            animation: floatOrb 20s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #6366f1;
+            top: -150px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: #c026d3;
+            bottom: -200px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: #2563eb;
+            top: 40%;
+            left: 40%;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(150px, 80px) scale(1.2);
+            }
+        }
+
+        /* Tela de Carregamento Premium */
+        #loader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #030308;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s, transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1.1);
+            /* Zoom de saída suave */
+            pointer-events: none;
+        }
+
+        #loader img {
+            width: 130px;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.5));
+            animation: pulseLogo 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseLogo {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.4));
+            }
+
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 25px rgba(192, 38, 211, 0.6));
+            }
+        }
+
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid rgba(255, 255, 255, 0.05);
+            border-top: 4px solid #a855f7;
+            border-right: 4px solid #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Cabeçalho Glassmorphism */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 40px;
+            background: rgba(3, 3, 8, 0.5);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+        }
+
+        .logo span {
+            background: linear-gradient(to right, #ffffff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hamburger Menu Icon */
+        .menu {
+            width: 30px;
+            height: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu:hover {
+            transform: scale(1.1);
+        }
+
+        .menu span {
+            height: 3px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Conteúdo Principal (Hero) */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            animation-delay: 1.6s;
+            /* Inicia após o loader sumir */
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+        }
+
+        .hero p {
+            font-size: 1.35rem;
+            color: #cbd5e1;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            animation-delay: 1.8s;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Botões Estilizados */
+        .buttons {
+            margin-top: 45px;
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            animation-delay: 2s;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 16px 44px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Botão Primário (Nixkup) */
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+            background-size: 200% 200%;
+            color: white;
+            box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.8);
+            animation: gradientShift 4s ease infinite;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .btn-primary:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 1);
+        }
+
+        .btn-primary:hover:after {
+            opacity: 1;
+        }
+
+        /* Botão Secundário (Discord) */
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px -15px rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fundo Submerso Animado -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Tela de Carregamento -->
+    <div id="loader">
+        <img src="res/tuxlogo.webp" alt="Tux Logo">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Interface Visível -->
+    <header>
+        <div class="logo">
+            <img src="res/tuxlogo.webp" alt="Tux Logo">
+            <span>tuxgameplay.fun</span>
+        </div>
+        <div class="menu">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1>Boas-Vindas ao Tux Gameplay</h1>
+        <p>A mais refinada comunidade de jogos & Linux perfeita para você.</p>
+
+        <div class="buttons">
+            <a class="btn btn-primary" href="https://kups.tuxgameplay.fun" target="_blank">Git</a>
+            <a class="btn btn-secondary" href="https://discord.tuxgameplay.fun" target="_blank">Discord</a>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener("load", () => {
+            const loader = document.getElementById("loader");
+            setTimeout(() => {
+                loader.classList.add("hidden");
+            }, 1200);
+        });
+    </script>
+</body>
+
+</html>
